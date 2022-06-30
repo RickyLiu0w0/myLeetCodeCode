@@ -1,0 +1,5 @@
+# MAC 文件
+*.Ds_Store
+
+# VS code 
+.vscode
