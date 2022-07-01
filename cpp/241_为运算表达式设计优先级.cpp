@@ -5,6 +5,12 @@
  */
 
 #include "AllInclude.h"
+/**
+ * Accepted 2022-07-01 00:05
+ * 25/25 (4 ms)
+ * Your runtime beats 67.87 % of cpp submissions
+ * Your memory usage beats 17.94 % of cpp submissions (11.3 MB)
+ */
 
 // @lc code=start
 class Solution {
