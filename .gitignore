@@ -1,5 +1,11 @@
 # MAC 文件
-*.Ds_Store
+**/*.Ds_Store
+
+## Xcode Patch
+**/*.xcodeproj
+**/.build
+**/Packages
+**/xcuserdata/
 
 # VS code 
 .vscode
