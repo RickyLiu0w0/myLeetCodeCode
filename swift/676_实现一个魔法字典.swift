@@ -1,35 +1,19 @@
-//
-//  main.swift
-//  helloSwift
-//
-//  Created by Rickyliu on 2022/7/2.
-//
+/*
+ * @lc app=leetcode.cn id=676 lang=swift
+ *
+ * [676] 实现一个魔法字典
+ */
 
-import Foundation
-
-print("Hello, World!")
-
-var temp: Square! = Square(sideLength: 2, name: "temp");
-
-print(temp.simpleDescription());
-
-func foo(_ a:inout Int, B b: inout Int) {
-    a+=1;
-    b+=1;
-}
-
-var a = 3;
-var b = 2;
-
-//foo(&a, B: &b);
-
-print("a/b = \(a/b)")
-
+// @lc code=start
+/*
+    Accepted 2022-07-11
+    83/83 (188 ms)
+    Your runtime beats 100 % of swift submissions
+    Your memory usage beats 100 % of swift submissions (14.6 MB)
+*/
 class MagicDictionary {
 
-    init() {
-        
-    }
+    init() {}
     
     func buildDict(_ dictionary: [String]) {
         self.dictionary_ = Set<String>(dictionary);
@@ -66,3 +50,12 @@ class MagicDictionary {
     
     var dictionary_: Set<String> = [];
 }
+
+/**
+ * Your MagicDictionary object will be instantiated and called as such:
+ * let obj = MagicDictionary()
+ * obj.buildDict(dictionary)
+ * let ret_2: Bool = obj.search(searchWord)
+ */
+// @lc code=end
+
