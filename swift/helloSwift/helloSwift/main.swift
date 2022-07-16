@@ -25,44 +25,24 @@ var b = 2;
 
 print("a/b = \(a/b)")
 
-class MagicDictionary {
+class MovingAverage {
 
-    init() {
-        
+    /** Initialize your data structure here. */
+    init(_ size: Int) {
+        array = Array(repeating: 0, count: size);
+        self.size = size;
     }
     
-    func buildDict(_ dictionary: [String]) {
-        self.dictionary_ = Set<String>(dictionary);
+    func next(_ val: Int) -> Double {
+        let first = array.removeFirst();
+        array.append(val);
+        let res: Double = Double(preSum + val) / Double(size);
+        preSum -= first;
+        preSum += val;
+        return res;
     }
     
-    func search(_ searchWord: String) -> Bool {
-        let stringSize: Int = searchWord.count;
-        for item in self.dictionary_ {
-            if (item.count != stringSize) {
-                continue;
-            }
-            
-            var flag: Bool = true;
-            var check: Bool = false;
-            
-            for index in searchWord.indices {
-                if item[index] != searchWord[index] {
-                    if flag {
-                        flag = false;
-                        check = true;
-                    } else {
-                        check = false;
-                        break;
-                    }
-                }
-            }
-            
-            if check {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    var dictionary_: Set<String> = [];
+    var array: [Int];
+    var size: Int;
+    var preSum: Int = 0;
 }
