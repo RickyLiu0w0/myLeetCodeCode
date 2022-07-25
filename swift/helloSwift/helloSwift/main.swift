@@ -25,24 +25,18 @@ var b = 2;
 
 print("a/b = \(a/b)")
 
-class MovingAverage {
-
-    /** Initialize your data structure here. */
-    init(_ size: Int) {
-        array = Array(repeating: 0, count: size);
-        self.size = size;
+class Solution {
+    func distanceBetweenBusStops(_ distance: [Int], _ start: Int, _ destination: Int) -> Int {
+        var total: Int = 0;
+        var subDistance: Int = 0;
+        for (index, value) in distance.enumerated() {
+            if index >= start && index < destination {
+                subDistance += value;
+            }
+            
+            total += value;
+        }
+        
+        return (subDistance < total - subDistance) ? subDistance : total - subDistance;
     }
-    
-    func next(_ val: Int) -> Double {
-        let first = array.removeFirst();
-        array.append(val);
-        let res: Double = Double(preSum + val) / Double(size);
-        preSum -= first;
-        preSum += val;
-        return res;
-    }
-    
-    var array: [Int];
-    var size: Int;
-    var preSum: Int = 0;
 }
