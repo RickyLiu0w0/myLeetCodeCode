@@ -1,30 +1,16 @@
-//
-//  main.swift
-//  helloSwift
-//
-//  Created by Rickyliu on 2022/7/2.
-//
+/*
+ * @lc app=leetcode.cn id=1331 lang=swift
+ *
+ * [1331] 数组序号转换
+ */
 
-import Foundation
-
-print("Hello, World!")
-
-var temp: Square! = Square(sideLength: 2, name: "temp");
-
-print(temp.simpleDescription());
-
-func foo(_ a:inout Int, B b: inout Int) {
-    a+=1;
-    b+=1;
-}
-
-var a = 3;
-var b = 2;
-
-//foo(&a, B: &b);
-
-print("a/b = \(a/b)")
-
+// @lc code=start
+/*
+    Accepted 2022-07-28 00:01
+    38/38 (276 ms)
+    Your runtime beats 100 % of swift submissions
+    Your memory usage beats 100 % of swift submissions (22.9 MB)
+*/
 class Solution {
     func arrayRankTransform(_ arr: [Int]) -> [Int] {
         let size = arr.count;
@@ -43,7 +29,6 @@ class Solution {
                 // 两个相等，不统计
                 continue;
             }
-            
             counter += 1;
             counters[arrSorted[index]] = counter;
         }
@@ -56,3 +41,10 @@ class Solution {
         return res;
     }
 }
+// @lc code=end
+/*
+[40,10,20,30,20]\n
+[100,100,100]\n
+[]\n
+[37,12,28,9,100,56,80,5,12]
+*/
