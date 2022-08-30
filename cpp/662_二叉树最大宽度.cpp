@@ -19,50 +19,55 @@
  * right(right) {}
  * };
  */
+
+/**
+ * Accepted 2022-08-27
+ * 114/114 (12 ms)
+ * Your runtime beats 30.64 % of cpp submissions
+ * Your memory usage beats 13.73 % of cpp submissions (17.3 MB)
+ */
+
+typedef pair<TreeNode*, uint32_t> NodePair;
 class Solution {
 public:
     int widthOfBinaryTree(TreeNode* root) {
-        // 当成是一个满二叉树进行运算
-        queue<TreeNode*> nodeQueue;
-        root->val = 1;
-        nodeQueue.push(root);
-        int maxWidth = 1, start, end;
-        while (!nodeQueue.empty()) {
-            int levelSize = nodeQueue.size();
+        queue<NodePair*> nodeQueue;
+        nodeQueue.push(new NodePair(root, 1));
+        int res = 1;
 
-            for (int i = 0; i < levelSize; ++i) {
-                TreeNode* currentNode = nodeQueue.front();
+        while (!nodeQueue.empty()) {
+            int nodeSize = nodeQueue.size();
+            uint32_t start, end;
+
+            for (int i = 0; i < nodeSize; ++i) {
+                NodePair* currentPair = nodeQueue.front();
                 nodeQueue.pop();
+                TreeNode* currentNode = currentPair->first;
+                uint32_t currentWeight = currentPair->second;
 
                 if (0 == i) {
-                    // 最左边的节点，记录编号
-                    start = currentNode->val;
+                    // 最左边节点
+                    start = currentWeight;
                 }
 
-                if (levelSize - 1 == i) {
-                    // 最右边的节点，记录编号
-                    end = currentNode->val;
+                if (nodeSize == i + 1) {
+                    // 最右边节点
+                    end = currentWeight;
                 }
 
                 if (currentNode->left) {
-                    // 有左节点
-                    currentNode->left->val = currentNode->val * 2;
-                    nodeQueue.push(currentNode->left);
+                    nodeQueue.push(new NodePair(currentNode->left, currentWeight * 2));
                 }
 
                 if (currentNode->right) {
-                    // 有右节点
-                    currentNode->right->val = currentNode->val * 2 + 1;
-                    nodeQueue.push(currentNode->right);
+                    nodeQueue.push(new NodePair(currentNode->right, currentWeight * 2 + 1));
                 }
             }
 
             int width = end - start + 1;
-
-            maxWidth = maxWidth < width ? width : maxWidth;
+            res = res < width ? width : res;
         }
-
-        return maxWidth;
+        return res;
     }
 };
 // @lc code=end
