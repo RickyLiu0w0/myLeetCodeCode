@@ -19,6 +19,7 @@
 #include <stack>          // 无迭代器
 #include <string>         // 字符串类
 #include <unordered_map>  // unordered_map
+#include <unordered_set>  // unordered_set
 #include <vector>
 using namespace std;
 
@@ -36,8 +37,7 @@ struct TreeNode {
     TreeNode* right;
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode* left, TreeNode* right)
-        : val(x), left(left), right(right) {}
+    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
 template <typename T>
