@@ -18,6 +18,13 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+/**
+ * Accepted 2022-08-29
+ * 107/107 (84 ms)
+ * Your runtime beats 43.3 % of cpp submissions
+ * Your memory usage beats 25.37 % of cpp submissions (48 MB)
+ */
 class Solution {
 public:
     TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
@@ -26,7 +33,7 @@ public:
         }
 
         int maxNum = nums[0];
-        vector<int>::iterator maxPos;
+        vector<int>::iterator maxPos = nums.begin();
         for (vector<int>::iterator iter = nums.begin(); iter != nums.end(); iter++) {
             if (*iter > maxNum) {
                 maxNum = *iter;
@@ -50,3 +57,11 @@ public:
     }
 };
 // @lc code=end
+/*
+[0]\n
+[1,0]\n
+[0,1]\n
+[0,1,2,3]\n
+[3,2,1,0]\n
+[3,2,1,6,0,5]
+*/

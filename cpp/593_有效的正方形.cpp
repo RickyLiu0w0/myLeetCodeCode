@@ -7,14 +7,16 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2022-07-29 07:33
+ * 253/253 (0 ms)
+ * Your runtime beats 100 % of cpp submissions
+ * Your memory usage beats 72.73 % of cpp submissions (25.8 MB)
+ */
 class Solution {
 public:
     bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3,
                      vector<int>& p4) {
-        if (p1[0] == p2[0] && p1[1] == p2[1]) {
-            return false;
-        }
-
         return validSquareHelp(p1, p2, p3, p4) ||
                validSquareHelp(p1, p3, p2, p4) ||
                validSquareHelp(p1, p4, p2, p3);
@@ -23,7 +25,10 @@ public:
 private:
     bool validSquareHelp(vector<int>& A, vector<int>& C, vector<int>& B,
                          vector<int>& D) {
-        // 假设ac、bd线段是对角线，正方形的充要条件是对角线垂直且相等
+        if (A[0] == B[0] && A[1] == B[1] || B[0] == C[0] && B[1] == C[1]) {
+            return false;
+        }
+        // 假设ac、bd线段是对角线，正方形的充要条件是对角线垂直且相等且有一个直角
         // 参考网站：https://blog.csdn.net/qq826309057/article/details/70942061
 
         const long AX = A[0];
@@ -53,8 +58,7 @@ private:
         // 1.2 跨立实验
         // AB X DB * CB X DB <= 0(点A、点C在BD的两侧或线段上)
         // BA X CA * DA X CA <= 0(点B、点D在CA的两侧或线段上)
-        // AB == (AX - BX, AY - BY) DB == (DX - BX, DY - BY) CB == (CX - BX , CY - BY)
-        // BA == (BX - AX, BY - AY) CA == (CX - AX, CY - AY) DA == (DX - AX , DY - AY)
+        // AB == (AX - BX, AY - BY) DB == (DX - BX, DY - BY) CB == (CX - BX , CY - BY) BA == (BX - AX, BY - AY) CA == (CX - AX, CY - AY) DA == (DX - AX , DY - AY)
         if ((((AX - BX) * (DY - BY) - (AY - BY) * (DX - BX)) *
              ((CX - BX) * (DY - BY) - (CY - BY) * (DX - BX))) > 0 ||
             (((BX - AX) * (CY - AY) - (BY - AY) * (CX - AX)) *
@@ -62,9 +66,10 @@ private:
             return false;
         }
 
-        // 2 判断是否垂直，向量AC，BD点积为0
+        // 2 判断是否垂直，向量AC，BD点积为0，AB、BC点积为0
         // AC * BD == 0
-        if (((AX - CX) * (BX - DX)) + (((AY - CY) * (BY - DY)))) {
+        if (((AX - CX) * (BX - DX)) + (((AY - CY) * (BY - DY))) ||
+            ((AX - BX) * (CX - BX)) + (((AY - BY) * (CY - BY)))) {
             return false;
         }
 
@@ -107,5 +112,9 @@ private:
 [2,1]\n
 [1,2]\n
 [0,0]\n
-[2,0]
+[2,0]\n
+[0,1]\n
+[1,1]\n
+[1,1]\n
+[1,0]
 */
