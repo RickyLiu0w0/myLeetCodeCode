@@ -7,42 +7,56 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/*
+    Accepted 2022-09-29
+    94/94 (12 ms)
+    Your runtime beats 17.12 % of cpp submissions
+    Your memory usage beats 9.46 % of cpp submissions (8.3 MB)
+*/
 class Solution {
 public:
     bool canTransform(string start, string end) {
-        size_t s = 0, e = 0, size = start.length();
-        while (s < size) {
-            if (start[s] == 'X') {
-                ++s;
-                continue;
+        queue<pair<char, size_t>> q;
+        size_t i = 0;
+        for (char c : start) {
+            if ('X' != c) {
+                q.push(pair<char, size_t>(c, i));
             }
+            ++i;
+        }
 
-            char temp = start[s];
-
-            while (e < size) {
-                if ('X' == end[e]) {
-                    ++e;
+        i = 0;
+        for (char c : end) {
+            if ('X' != c) {
+                if (!q.empty() && c == q.front().first) {
+                    if ((c == 'L' && q.front().second >= i) || (c == 'R' && q.front().second <= i)) {
+                        q.pop();
+                    } else {
+                        return false;
+                    }
                 } else {
-                    break;
+                    return false;
                 }
             }
 
-            if (e == size || temp != end[e] || ('R' == temp && s > e) ||
-                ('L' == temp && s < e)) {
-                return false;
-            }
-
-            ++s;
-            ++e;
+            ++i;
         }
 
-        while (e < size) {
-            if ('X' != end[e]) {
-                return false;
-            }
-            ++e;
+        if (!q.empty()) {
+            return false;
+        } else {
+            return true;
         }
-        return true;
     }
 };
 // @lc code=end
+/*
+""RXXLRXRXL"\n
+"XRLXXRRLX"\n
+"XLLR"\n
+"LXLX"\n
+"LXLX"\n
+"XLLR"\n
+"LXXLXRLXXL"\n
+"XLLXRXLXLX""
+*/
