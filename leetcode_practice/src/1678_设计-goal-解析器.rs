@@ -1,5 +1,10 @@
-pub struct Solution;
+/*
+ * @lc app=leetcode.cn id=1678 lang=rust
+ *
+ * [1678] 设计 Goal 解析器
+ */
 
+// @lc code=start
 impl Solution {
     pub fn interpret(command: String) -> String {
         command.split_inclusive(&['G', ')'][..]).map(|string| match string {
@@ -9,8 +14,5 @@ impl Solution {
         }).collect()
     }
 }
+// @lc code=end
 
-fn main() {
-    println!("Hello, world!");
-    println!("{}", Solution::interpret("GGG()(al)".to_string()));
-}
