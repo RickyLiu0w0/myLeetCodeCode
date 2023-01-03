@@ -1,21 +1,19 @@
 pub struct Solution;
 
-use std::collections::HashSet; 
 impl Solution {
-    pub fn repeated_character(s: String) -> char {
-        let mut dict: HashSet<char> = HashSet::new();
-        for c in s.chars() {
-            if dict.contains(&c) {
-                return c;
-            } else {
-                dict.insert(c);
-            }
-        }
-        unreachable!()
+    pub fn are_numbers_ascending(s: String) -> bool {
+        s.split_whitespace() // 按空格分割，返回SplitWhitespace类型
+        .filter_map(|s| s.parse::<i32>().ok()) // 筛选数字，直接用ok取
+        .collect::<Vec<_>>()
+        .windows(2) // 2 大小的滑动床空
+        .all(|x| x[0] < x[1]) // 所有都要符合严格递增
     }
 }
 
 fn main() {
     println!("Hello, world!");
-    println!("{}", Solution::repeated_character("seself".to_string()));
+    println!(
+        "{}",
+        Solution::are_numbers_ascending("sunset is at 7 51 pm overnights lows will be in the low 53 and 60".to_string())
+    );
 }
