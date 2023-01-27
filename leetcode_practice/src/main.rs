@@ -1,24 +1,17 @@
 pub struct Solution;
 
 impl Solution {
-    pub fn count_even(num: i32) -> i32 {
-        let mut res = 0;
-        for mut i in 1..=num {
-            let mut sum = 0;
-            while i != 0 {
-                sum += i % 10;
-                i /= 10;
-            }
-
-            if 0 == sum % 2 {
-                res += 1;
+    pub fn greatest_letter(s: String) -> String {
+        for c in ('A'..='Z').rev() {
+            if s.contains(c) && s.contains(c.to_ascii_lowercase()) {
+                return c.to_string();
             }
         }
-        res
+        String::new()
     }
 }
 
 fn main() {
     println!("Hello, world!");
-    println!("{}", Solution::count_even(30));
+    println!("{}", Solution::greatest_letter(String::from("AAA")));
 }
