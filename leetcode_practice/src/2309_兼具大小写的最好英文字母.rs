@@ -6,7 +6,7 @@
 
 // @lc code=start
 /*
-    Accepted
+    Accepted 2023-01-27
     113/113 (8 ms)
     Your runtime beats 100 % of rust submissions
     Your memory usage beats 60 % of rust submissions (2.1 MB)
