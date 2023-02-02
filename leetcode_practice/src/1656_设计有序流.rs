@@ -1,3 +1,17 @@
+/*
+ * @lc app=leetcode.cn id=1656 lang=rust
+ *
+ * [1656] 设计有序流
+ */
+
+/*
+    Accepted 2023-02-01
+    101/101 (24 ms)
+    Your runtime beats 100 % of rust submissions
+    Your memory usage beats 100 % of rust submissions (2.8 MB)
+ */
+
+// @lc code=start
 struct OrderedStream {
     ptr: usize,
     stream: Vec<String>,
@@ -28,12 +42,16 @@ impl OrderedStream {
     }
 }
 
-fn main() {
-    println!("Hello, world!");
-    let mut os = OrderedStream::new(5);
-    println!("{:?}", os.insert(5, "ccccc".to_string())); // 插入 (3, "ccccc")，返回 []
-    println!("{:?}", os.insert(1, "aaaaa".to_string())); // 插入 (1, "aaaaa")，返回 ["aaaaa"]
-    println!("{:?}", os.insert(2, "bbbbb".to_string())); // 插入 (2, "bbbbb")，返回 ["bbbbb", "ccccc"]
-    println!("{:?}", os.insert(3, "eeeee".to_string())); // 插入 (5, "eeeee")，返回 []
-    println!("{:?}", os.insert(4, "ddddd".to_string())); // 插入 (4, "ddddd")，返回 ["ddddd", "eeeee"]
-}
+/**
+ * Your OrderedStream object will be instantiated and called as such:
+ * let obj = OrderedStream::new(n);
+ * let ret_1: Vec<String> = obj.insert(idKey, value);
+ */
+// @lc code=end
+
+/*
+["OrderedStream","insert","insert","insert","insert","insert"]\n
+[[5],[3,"ccccc"],[1,"aaaaa"],[2,"bbbbb"],[5,"eeeee"],[4,"ddddd"]]\n
+["OrderedStream","insert","insert","insert","insert","insert"]\n
+[[5],[5,"ccccc"],[4,"aaaaa"],[3,"bbbbb"],[1,"eeeee"],[2,"ddddd"]]\n
+ */
