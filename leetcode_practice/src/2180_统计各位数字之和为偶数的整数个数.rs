@@ -1,7 +1,16 @@
-use std::collections::HashMap;
+/*
+ * @lc app=leetcode.cn id=2180 lang=rust
+ *
+ * [2180] 统计各位数字之和为偶数的整数个数
+ */
 
-pub struct Solution;
-
+// @lc code=start
+/*
+    Accepted 2022-01-06
+    71/71 (0 ms)
+    Your runtime beats 100 % of rust submissions
+    Your memory usage beats 0 % of rust submissions (2.1 MB)
+ */
 impl Solution {
     pub fn count_even(num: i32) -> i32 {
         let mut res = 0;
@@ -20,7 +29,4 @@ impl Solution {
     }
 }
 // @lc code=end
-fn main() {
-    println!("Hello, world!");
-    println!("{}", Solution::count_even(30));
-}
+

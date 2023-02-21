@@ -20,7 +20,6 @@ class Solution {
                 charSet.insert(char);
             }
         }
-
-        return "a";
+        fatalError("NO Valid Outputs");
     }
 }

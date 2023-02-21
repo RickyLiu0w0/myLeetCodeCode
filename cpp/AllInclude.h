@@ -2,8 +2,9 @@
 #define ALLINCLUDE_H
 
 #include <algorithm>  // sort
-#include <bitset>     // STL 位集容器
-#include <climits>    // INT_MIN
+#include <array>
+#include <bitset>   // STL 位集容器
+#include <climits>  // INT_MIN
 #include <cmath>
 #include <complex>  // 复数类
 #include <cstring>  // memset(a, 0, sizeof(a)); memcpy(b, a, 4*sizeof(int));
@@ -37,7 +38,8 @@ struct TreeNode {
     TreeNode* right;
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
+    TreeNode(int x, TreeNode* left, TreeNode* right)
+        : val(x), left(left), right(right) {}
 };
 
 template <typename T>
