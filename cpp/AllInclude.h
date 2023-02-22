@@ -10,6 +10,7 @@
 #include <cstring>  // memset(a, 0, sizeof(a)); memcpy(b, a, 4*sizeof(int));
 #include <deque>
 #include <forward_list>  // 单链表
+#include <functional>    // lambda递归
 #include <iostream>
 #include <iterator>  // template <<
 #include <list>      // STL 线性列表容器,双向链表
@@ -38,8 +39,7 @@ struct TreeNode {
     TreeNode* right;
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode* left, TreeNode* right)
-        : val(x), left(left), right(right) {}
+    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
 template <typename T>
