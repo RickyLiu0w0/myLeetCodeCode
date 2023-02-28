@@ -1,6 +1,18 @@
-use std::{collections::HashMap, vec};
+/*
+ * @lc app=leetcode.cn id=2363 lang=rust
+ *
+ * [2363] 合并相似的物品
+ */
 
-pub struct Solution;
+/*
+    Accepted 2023-02-28
+    49/49 cases passed (4 ms)
+    Your runtime beats 100 % of rust submissions
+    Your memory usage beats 14.29 % of rust submissions (2.4 MB)
+*/
+
+// @lc code=start
+use std::{collections::HashMap, vec};
 
 impl Solution {
     pub fn merge_similar_items(items1: Vec<Vec<i32>>, items2: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
@@ -24,9 +36,5 @@ impl Solution {
         res
     }
 }
-
 // @lc code=end
-fn main() {
-    println!("Hello, world!");
-    println!("{:?}", Solution::merge_similar_items(vec![vec![1,1], vec![4, 5], vec![3, 8]], vec![vec![3,1], vec![1,5]]));
-}
+
