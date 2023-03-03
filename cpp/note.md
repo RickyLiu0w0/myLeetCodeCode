@@ -113,6 +113,13 @@ public:
 ```
 ## 回溯（全排列）
 
+### 问题集
+
+1. [112. 路径总和](https://leetcode.cn/problems/path-sum)
+2. [113. 路径总和 II](https://leetcode.cn/problems/path-sum-ii)
+3. [131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning)
+4. [140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii)
+
 ```
 result = []
 def backtrack(路径, 选择列表):
@@ -139,7 +146,7 @@ def backtrack(路径, 选择列表):
 
 ![子集问题递归树](https://pic.leetcode-cn.com/d8e07f0c876d9175df9f679fcb92505d20a81f09b1cb559afc59a20044cc3e8c-子集问题递归树.png)
 
-观察上图可得，选择列表里的数，都是选择路径(红色框)后面的数，比如`1`这条路径，他后面的选择列表只有 `2、3`，`2` 这条路径后面只有`3`这个选择，那么这个时候，就应该 使用一个参数 start，来标识当前的选择列表的起始位置。也就是标识每一层的状态，因此被形象的称为`状态变量`，最终函数签名如下
+观察上图可得，选择列表里的数，都是选择路径(红色框)后面的数，比如`1`这条路径，他后面的选择列表只有 `2、3`，`2` 这条路径后面只有`3`这个选择，那么这个时候，就应该 使用一个参数`start`，来标识当前的选择列表的起始位置。也就是标识每一层的状态，因此被形象的称为`状态变量`，最终函数签名如下
 
 ```cpp
 //nums为题目中的给的数组

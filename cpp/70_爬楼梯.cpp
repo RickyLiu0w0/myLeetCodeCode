@@ -11,7 +11,7 @@
  * 45/45 (0 ms)
  * Your runtime beats 100 % of cpp submissions
  * Your memory usage beats 95.28 % of cpp submissions (5.7 MB)
-*/
+ */
 
 // @lc code=start
 class Solution {
@@ -22,11 +22,10 @@ public:
         dp[1] = 1;
         dp[2] = 2;
 
-        for (size_t i = 3; i <=n; ++i) {
-            dp[i] = dp[i-1]+dp[i-2];
+        for (size_t i = 3; i <= n; ++i) {
+            dp[i] = dp[i - 1] + dp[i - 2];
         }
         return dp[n];
     }
 };
 // @lc code=end
-
