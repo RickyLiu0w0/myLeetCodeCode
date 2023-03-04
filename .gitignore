@@ -24,3 +24,8 @@ Cargo.lock
 
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
+
+# 编译文件
+cpp/main.cpp
+leetcode_solution
+cpp/obj/*.o
