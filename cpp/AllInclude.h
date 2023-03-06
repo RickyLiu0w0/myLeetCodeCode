@@ -142,7 +142,7 @@ ostream& operator<<(ostream& os, TreeNode* root) {
     return os;
 }
 
-TreeNode* construct_binary_tree(vector<int>& vec, int len, int i) {
+TreeNode* construct_binary_tree(const vector<int>& vec, const int len, const int i) {
     if (vec.empty() || len < 1)
         return nullptr;
     TreeNode* root = nullptr;
@@ -155,6 +155,19 @@ TreeNode* construct_binary_tree(vector<int>& vec, int len, int i) {
         root->right = construct_binary_tree(vec, len, 2 * i + 2);
     }
     return root;
+}
+
+ListNode* construct_list_node(const vector<int>& vec) {
+    if (vec.empty()) {
+        return nullptr;
+    }
+
+    ListNode* head = nullptr;
+    for (auto iter = vec.rbegin(); iter < vec.rend(); ++iter) {
+        head = new ListNode(*iter, head);
+    }
+
+    return head;
 }
 
 #endif
