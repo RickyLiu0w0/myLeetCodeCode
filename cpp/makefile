@@ -11,7 +11,7 @@ WARNING_FLAGS = -Wall -Waddress -Warray-bounds -Wc++0x-compat -Wchar-subscripts 
                 -Wunknown-pragmas -Wunused-function -Wunused-label -Wunused-value \
                 -Wunused-variable
 
-CXXFLAGS = -c $(WARNING_FLAGS) -std=c++11
+CXXFLAGS = -c -g $(WARNING_FLAGS) -std=c++11
 
 vpath %.o $(OBJ_DIR)
 
