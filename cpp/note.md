@@ -256,4 +256,333 @@ private:
     }
 };
 ```
+### [剑指 Offer 38. 字符串的排列](https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/)
 
+```cpp
+class Solution {
+public:
+    vector<string> permutation(string s) {
+        string path;
+        vector<string> res;
+        backTrack(path, s, 0);
+        res.assign(se.begin(), se.end());
+        return res;
+    }
+private:
+    set<string> se;
+    void backTrack(string &path, string& s, uint16_t set) {
+        int n = s.length();
+        if (path.length() == n) {
+            se.insert(path);
+            return;
+        }
+
+        for (int j = 0; j < n; ++j) {
+            if (set & (1 << j)) {
+                // 该位置的字符已经放过
+                ;
+            } else {
+                path.push_back(s[j]);
+                backTrack(path, s, set | (1 << j) );
+                path.pop_back();
+            }
+        }
+    }
+};
+```
+
+```cpp
+class Solution {
+public:
+    vector<string> permutation(string s) {
+        backtrack(s, 0);
+        return res;
+    }
+private:
+    vector<string> res;
+    void backtrack(string& s, size_t begin) {
+        size_t n = s.length();
+        if (begin == n) {
+            res.emplace_back(s);
+            return;
+        }
+
+        set<char> se;
+        for (size_t i = begin; i < n; ++i) {
+            if (se.count(s[i]) != 0) continue; // 该字母已存在过这个位置
+            // 将处于i的字母固定在当前位置
+            se.insert(s[i]);
+            swap(s, i ,begin);
+            backtrack(s, begin + 1);
+            swap(s, i , begin); // 撤销选择
+        }
+    }
+
+    inline void swap(string& s, size_t i, size_t j) {
+        char c = s[i];
+        s[i] = s[j];
+        s[j] = c;
+    }
+};
+```
+
+## 动规相关
+
+### [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+> 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+> 
+> 子数组 是数组中的一个连续部分。
+
+由于是连续，所以**选与不选**的点在：
+1. 加入前面的队列
+2. 自己新开一个队列
+
+```cpp
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int dp_old = -10000, dp_new;
+        int res = INT_MIN;
+        for (auto& num : nums) {
+            dp_new = max(dp_old + num, num);
+            res = max(res, dp_new);
+            dp_old = dp_new;
+        }
+        return res;
+    }
+};
+```
+
+### [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+!!! note 思路
+
+[最长递增子序列](https://www.bilibili.com/video/BV1ub411Q7sB)
+
+```cpp
+class Soluction {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        // g[i] 表示长度i+1的LTS的末尾元素最小值
+        /**
+         * nums = [1,6,7,2,4,5,3]
+         * g = [0,0,0,0,0,0,0]
+         * g = [1,0,0,0,0,0,0] 1
+         * g = [1,6,0,0,0,0,0] 6
+         * g = [1,6,7,0,0,0,0] 7
+         * g = [1,2,7,0,0,0,0] 2
+         * g = [1,2,4,0,0,0,0] 4
+         * g = [1,2,4,5,0,0,0] 5
+         * g = [1,2,3,5,0,0,0] 3
+         *
+         */
+
+        int ng = 0;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            auto pos = lower_bound(nums.begin(), nums.begin() + ng, nums[i]);
+            if (pos == ng + nums.begin()) {
+                // 找不到，直接加入末尾
+                nums[ng] = nums[i];
+                ng++;
+            } else {
+                // 找到，换成最小值
+                *pos = nums[i];
+            }
+        }
+        return ng;
+    }
+};
+```
+
+### [1626.无矛盾的最佳球队](https://leetcode.cn/problems/best-team-with-no-conflicts/)
+
+```cpp
+class Solution {
+public:
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        vector<pair<int, int>> vp;
+        size_t n = scores.size();
+        for (size_t i = 0; i < n; ++i) {
+            vp.emplace_back(make_pair(scores.at(i), ages.at(i)));
+        }
+
+        sort(vp.begin(), vp.end(), [](pair<int, int>& x, pair<int, int>& y) -> bool {
+            // 分数优先，年龄随后
+            if (x.first < y.first) {
+                return true;
+            } else if (x.first > y.first) {
+                return false;
+            } else {
+                return x.second < y.second;
+            }
+        });
+
+        vector<int> dp(n, 0);
+
+        int res = 0;
+        for (size_t i = 0; i < n; ++i) {
+            for (size_t j = 0; j < i; ++j) {
+                if (vp[j].second <= vp[i].second) {
+                    dp[i] = max(dp[i], dp[j]);
+                }
+            }
+            dp[i] += vp[i].first;
+            res = max(res, dp[i]);
+        }
+
+        return res;
+    }
+};
+```
+
+### [10. 正则表达式匹配](https://leetcode.cn/problems/regular-expression-matching/)
+
+!!! note 思路
+
+[经典动态规划：正则表达式](https://labuladong.github.io/algo/di-er-zhan-a01c6/yong-dong--63ceb/jing-dian--8d516/)
+
+
+```cpp
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        return dp(s, 0, p, 0);
+    }
+
+private:
+    unordered_map<string, bool> memo;  // 备忘录
+
+    // s[..i]和p[..j]是否匹配
+    bool dp(string& s, int i, string& p, int j) {
+        // base case
+        int m = s.length(), n = p.length();
+        if (j == n) {
+            // 模式指针已走到末尾，现在只需判断字符串指针i是否已到末尾
+            return m == i;
+        }
+
+        if (m == i) {
+            // 字符串指针i已到末尾
+            // 剩下的模式可能有三种情况
+            // A*B (false)
+            // A*B* (true)
+            // A*BB (false)
+            if ((n - j) % 2) {
+                // A*B
+                return false;
+            }
+            for (; j < n; j += 2) {
+                if (p[j + 1] != '*') {
+                    // A*BB (false)
+                    return false;
+                }
+            }
+
+            return true;  // A*B* (true)
+        }
+        /*------------ base case end -------------------*/
+        string key = to_string(i) + "," + to_string(j);
+        bool res = false;
+        if (memo.count(key) != 0) return memo[key];
+        if (s[i] == p[j] || p[j] == '.') {
+            // 匹配上了
+            if (j < n - 1 && p[j + 1] == '*') {
+                // 这是一个通配符，但是不确定有没有用上
+                res =  /* 没用上 */ dp(s, i, p, j + 2) || /* 用上了，通过递归才直到用了多少次 */ dp(s, i + 1, p, j);
+            } else {
+                // 老老实实一个一个匹配
+                res =  dp(s, i + 1, p, j + 1);
+            }
+        } else {
+            // 匹配不上
+            if (j < n - 1 && p[j + 1] == '*') {
+                // 这是一个通配符（免死金牌），但0次匹配，j直接到下一个
+                res = dp(s, i, p, j + 2);
+            } else {
+                // 没有免死金牌，无了
+                res = false;
+            }
+        }
+        memo[key] = res;
+        return res;
+    }
+};
+```
+### [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
+
+```cpp
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int one = text1.length();
+        int two = text2.length();
+
+        vector<vector<int>> dp(one + 1, vector<int>(two + 1, 0));
+
+        for (int i = 1; i <= one; ++i) {
+            for (int j = 1; j <= two; ++j) {
+                if (text1[i - 1] == text2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[one][two];
+    }
+};
+```
+## 数位DP
+
+### [2376. 统计特殊整数](https://leetcode.cn/problems/count-special-integers/)
+
+!!! note 思路
+
+[数位 DP 通用模板](https://www.bilibili.com/video/BV1rS4y1s721)
+
+```cpp
+class Solution {
+public:
+    int countSpecialNumbers(int n) {
+        string s = to_string(n);
+        
+        // 返回从第i位开始填数字，已填集合为mask，能够构造出至少一位重复数字的个数
+        // is_limit，检查前面的数字是否都是n对应位上的，如果为 true 则第i位只能填s[i]，否则可以最高填9
+        // is_num，检查前面是否以前填过数字，ture则前面填过，第i位可以填0-9；如果为 false，我们可以跳过，或者第i位置只能填1-x，x由is_limit约束
+
+        function<int(int, bool, bool, uint16_t)> f = [&](int i, bool is_limit, bool is_num, uint16_t mask) -> int {
+            if (i == s.length()) {
+                return is_num;  //  前面填了的话，这是一个可行结果
+            }
+
+            int res = 0;
+            if (!is_num) {
+                // 不选，直接跳到下一个
+                res = f(i + 1, false, false, mask);
+            }
+
+            // 选
+            int up = is_limit ? (s[i] - '0') : 9;
+            for (int j = 1 - is_num; j <= up; ++j) {
+                if ((mask & (1 << j)) == 0) {
+                    // 没有填过
+                    res += f(i + 1, is_limit && (j == s[i] - '0'), true, mask | (1 << j));
+                }
+            }
+            return res;
+        };
+
+        return f(0, true, false, 0);
+    }
+};
+```
+
+### [1012. 至少有 1 位重复的数字](https://leetcode.cn/problems/numbers-with-repeated-digits/)
+
+[2376题](#2376.统计特殊整数)的补集
+
+```cpp
+return n - f(0, true, false, 0);
+```
