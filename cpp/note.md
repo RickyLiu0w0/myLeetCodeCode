@@ -1,4 +1,8 @@
+[toc]
+
 ## 滑动窗口
+
+[同向双指针 滑动窗口【基础算法精讲 01】](https://www.bilibili.com/video/BV1hd4y1r7Gq)
 
 ```cpp
 /* 滑动窗口算法框架 */
@@ -111,6 +115,90 @@ public:
     }
 };
 ```
+
+### [209. 长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/)
+
+直接滑动窗口，找到大于`target`的时候就缩小窗口
+
+```cpp
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int n = nums.size();
+
+        int l = 0, r = 0;
+        int sum = 0, res = INT_MAX;
+        while (r < n) {
+            // 窗口往右扩展
+            sum += nums[r++];
+
+            while (l < r && sum >= target) {
+                // 达到目标
+                res = min(res, r - l);
+
+                // 缩小窗口
+                sum -= nums[l++];
+            }
+        }
+        return res == INT_MAX ? 0 : res;
+    }
+};
+```
+
+### [713. 乘积小于 K 的子数组](https://leetcode.cn/problems/subarray-product-less-than-k/)
+
+```cpp
+class Solution {
+public:
+    int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+        size_t size = nums.size(), left = 0, right = 0;
+        long long  mul = 1;
+        int res = 0;
+        while (right < size) {
+            mul *= nums[right++];
+            while (left < right && mul >= k) {
+                mul /= nums[left++];
+            }
+            // 说明[l, r), [l + 1, r), ..., [r - 1, r)都是符合的
+            // 个数为 r - 1 - l + 1 == r - l;
+            res += right - left;
+        }
+        return res;
+    }
+};
+```
+## [1574. 删除最短的子数组使剩余数组有序](https://leetcode.cn/problems/shortest-subarray-to-be-removed-to-make-array-sorted/)
+
+```cpp
+class Solution {
+public:
+    int findLengthOfShortestSubarray(vector<int>& arr) {
+        // 从右面开始找右边的严格递增，保证右边严格递增
+        int size = arr.size();
+        int r = size - 1;
+        while (r > 0 && arr[r - 1] <= arr[r]) {
+            --r;
+        }
+
+        if (!r) {
+            return 0;
+        }
+
+        // 找到右边的最低点arr[r]，然后找左边的递增序列，保持和右递增序列衔接
+        // 如何保持衔接？r++ 直到 arr[l] <= arr[r]
+        int l = 0, res = r;
+        while (l == 0 || arr[l - 1] <= arr[l]) {
+            while (r < size && arr[l] > arr[r]) {
+                r++;
+            }
+            res = min(res, r - l - 1);
+            ++l;
+        }
+        return res;
+    }
+};
+```
+
 ## 回溯（全排列）
 
 ### 问题集
@@ -257,3 +345,70 @@ private:
 };
 ```
 
+### [343. 整数拆分](https://leetcode.cn/problems/integer-break/)
+
+这题就是用动归做
+
+一个数nn，要将其拆分成为`(i, nn - i)`，`i`从`[1, nn)`中取，然后再判断需不需要拆分
+
+`nn - i`为不拆分，`dp(nn - i)`为继续拆分
+
+```cpp
+class Soluction {
+public:
+    int integerBreak(int n) {
+        vector<int> memo(59, -1);
+        memo[0] = 0;
+        memo[1] = 1;
+        function<int(int)> dp = [&](int nn) -> int {
+            if (memo[nn] != -1) {
+                return memo[nn];
+            }
+
+            int res = INT_MIN;
+            for (int i = 1; i < nn; i++) {
+                res = max(res, i * max(nn - i, dp(nn - i)));
+            }
+            memo[nn] = res;
+            return res;
+        };
+        return dp(n);
+    }
+};
+```
+
+## 数学
+
+### [剑指 Offer 14- II. 剪绳子 II](https://leetcode.cn/problems/jian-sheng-zi-ii-lcof/)
+
+可以证明每三段三段分割出来最好的
+
+但是4的分割是`(2, 2)`而不是`(1,3)`
+
+```cpp
+const int MOD = 1000000007;
+class Solution {
+public:
+    int cuttingRope(int n) {
+        // 直接除3
+        // 基本判断
+        if (n < 3) return 1;
+        if (n == 3) return 2;
+
+        uint32_t res = 1;
+        while (n > 4) {
+        /**
+         * 最后剩下4，就分为 2 * 2
+         * 最后剩下3，就直接乘上3，不拆分
+         * 最后剩下2，就乘上2，也不拆分
+         * 最后剩下1，就乘上1，也不拆分
+         */
+            res *= 3;
+            res %= MOD;
+            n -= 3;
+        }
+
+        return (n * res) % MOD;
+    }
+};
+```
