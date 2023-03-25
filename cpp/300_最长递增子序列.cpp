@@ -63,8 +63,15 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-03-22
+ * 54/54 (8 ms)
+ * Your runtime beats 92.62 % of cpp submissions
+ * Your memory usage beats 98.31 % of cpp submissions (10 MB)
+*/
 class Solution {
 public:
+    /*
     int lengthOfLIS(vector<int>& nums) {
         // 先找到局部最低点
         uint16_t i = 0, numsSize = nums.size();
@@ -91,6 +98,37 @@ public:
         }
 
         return maxCount;
+    }*/
+
+    int lengthOfLIS(vector<int>& nums) {
+        // g[i] 表示长度i+1的LTS的末尾元素最小值
+        /**
+         * nums = [1,6,7,2,4,5,3]
+         * g = [0,0,0,0,0,0,0]
+         * g = [1,0,0,0,0,0,0] 1
+         * g = [1,6,0,0,0,0,0] 6
+         * g = [1,6,7,0,0,0,0] 7
+         * g = [1,2,7,0,0,0,0] 2
+         * g = [1,2,4,0,0,0,0] 4
+         * g = [1,2,4,5,0,0,0] 5
+         * g = [1,2,3,5,0,0,0] 3
+         *
+         */
+
+        int ng = 0;
+        int n = nums.size();
+        for (int i = 0; i < n; ++i) {
+            auto pos = lower_bound(nums.begin(), nums.begin() + ng, nums[i]);
+            if (pos == ng + nums.begin()) {
+                // 找不到，直接加入末尾
+                nums[ng] = nums[i];
+                ng++;
+            } else {
+                // 找到，换成最小值
+                *pos = nums[i];
+            }
+        }
+        return ng;
     }
 };
 // @lc code=end
