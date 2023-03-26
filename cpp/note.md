@@ -757,3 +757,48 @@ public:
 ```cpp
 return n - f(0, true, false, 0);
 ```
+### [1017. 负二进制转换(十进制转其他进制)](https://leetcode.cn/problems/convert-to-base-2/)
+
+模版
+
+```cpp
+auto f = [](int n, int K) -> vector<int> {
+    vector<int> res;
+    while (n) {
+        int r = (n % K + abs(K)) % abs(K);
+        n -= r;
+        n /= K;
+        res.emplace_back(r);
+    }
+    reverse(res.begin(), res.end());
+    return res;
+};
+
+```
+
+本题代码
+
+```cpp
+class Solution {
+public:
+    string baseNeg2(int n) {
+        auto f = [](int n, int K) -> vector<int> {
+            vector<int> res;
+            while (n) {
+                int r = (n % K + abs(K)) % abs(K);
+                n -= r;
+                n /= K;
+                res.emplace_back(r);
+            }
+            reverse(res.begin(), res.end());
+            return res;
+        };
+        vector<int> res = f(n, -2);
+        string s;
+        for (auto x : res) {
+            s.push_back(x + '0');
+        }
+        return s;
+    }
+};
+```
