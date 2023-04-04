@@ -167,7 +167,7 @@ public:
     }
 };
 ```
-## [1574. 删除最短的子数组使剩余数组有序](https://leetcode.cn/problems/shortest-subarray-to-be-removed-to-make-array-sorted/)
+### [1574. 删除最短的子数组使剩余数组有序](https://leetcode.cn/problems/shortest-subarray-to-be-removed-to-make-array-sorted/)
 
 ```cpp
 class Solution {
@@ -573,6 +573,129 @@ public:
 };
 ```
 
+## 区间DP
+
+### [516. 最长回文子序列](https://leetcode.cn/problems/longest-palindromic-subsequence/)
+
+[区间 DP：最长回文子序列 最优三角剖分【基础算法精讲 22】](https://www.bilibili.com/video/BV1Gs4y1E7EU)
+
+由首尾判断是否相等，相等则选入，+2；不相等则选择其中一个
+
+由于`dp[i][j]`要由`i+1`和`j-1`得出，所以i要倒叙遍历，j要正序遍历
+
+一个字符`dp[i][i]`情况下，回文长度为1
+
+```cpp
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        // dp[i][j]代表从i到j的长回文子序列
+        int n = s.length();
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+
+        for (int i = n - 1; i > -1; --i) {
+            dp[i][i] = 1;
+            for (int j = i + 1; j < n; ++j) {
+                if (s[i] == s[j]) {
+                    // 两个都要选
+                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                } else {
+                    // 选其中一个
+                    dp[i][j] = max(dp[i][j - 1], dp[i + 1][j]);
+                }
+            }
+        }
+
+        return dp[0][n - 1];
+    }
+};
+```
+
+### [1039. 多边形三角剖分的最低得分](https://leetcode.cn/problems/minimum-score-triangulation-of-polygon/)
+
+![多边形三角剖分的最低得分](https://pic.leetcode.cn/1680388698-XNaKai-1039-cut.png)
+
+```cpp
+class Solution {
+public:
+    int minScoreTriangulation(vector<int>& values) {
+        int n = values.size();
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        // 计算从i到j的字问题
+        function<int(int, int)> dfs = [&](int i, int j) -> int {
+            if (j == i + 1) {
+                // 没有三角形
+                return 0;
+            }
+            if (dp[i][j] != -1) return dp[i][j];
+
+            int res = INT_MAX;
+            for (int k = i + 1; k < j; ++k) {
+                // 枚举(i,k)多边形，(k,j)多边形，以及[i,j,k]三角形
+                res = min(res, values[i] * values[j] * values[k] + dfs(i, k) + dfs(k, j));
+            }
+            dp[i][j] = res;
+            return res;
+        };
+
+        return dfs(0, n - 1);
+    }
+};
+```
+
+## 数位DP
+
+### [2376. 统计特殊整数](https://leetcode.cn/problems/count-special-integers/)
+
+!!! note 思路
+
+[数位 DP 通用模板](https://www.bilibili.com/video/BV1rS4y1s721)
+
+```cpp
+class Solution {
+public:
+    int countSpecialNumbers(int n) {
+        string s = to_string(n);
+        
+        // 返回从第i位开始填数字，已填集合为mask，能够构造出至少一位重复数字的个数
+        // is_limit，检查前面的数字是否都是n对应位上的，如果为 true 则第i位只能填s[i]，否则可以最高填9
+        // is_num，检查前面是否以前填过数字，ture则前面填过，第i位可以填0-9；如果为 false，我们可以跳过，或者第i位置只能填1-x，x由is_limit约束
+
+        function<int(int, bool, bool, uint16_t)> f = [&](int i, bool is_limit, bool is_num, uint16_t mask) -> int {
+            if (i == s.length()) {
+                return is_num;  //  前面填了的话，这是一个可行结果
+            }
+
+            int res = 0;
+            if (!is_num) {
+                // 不选，直接跳到下一个
+                res = f(i + 1, false, false, mask);
+            }
+
+            // 选
+            int up = is_limit ? (s[i] - '0') : 9;
+            for (int j = 1 - is_num; j <= up; ++j) {
+                if ((mask & (1 << j)) == 0) {
+                    // 没有填过
+                    res += f(i + 1, is_limit && (j == s[i] - '0'), true, mask | (1 << j));
+                }
+            }
+            return res;
+        };
+
+        return f(0, true, false, 0);
+    }
+};
+```
+
+### [1012. 至少有 1 位重复的数字](https://leetcode.cn/problems/numbers-with-repeated-digits/)
+
+[2376题](#2376.统计特殊整数)的补集
+
+```cpp
+return n - f(0, true, false, 0);
+```
+
 ## 数学
 
 ### [剑指 Offer 14- II. 剪绳子 II](https://leetcode.cn/problems/jian-sheng-zi-ii-lcof/)
@@ -705,58 +828,7 @@ public:
     }
 };
 ```
-## 数位DP
 
-### [2376. 统计特殊整数](https://leetcode.cn/problems/count-special-integers/)
-
-!!! note 思路
-
-[数位 DP 通用模板](https://www.bilibili.com/video/BV1rS4y1s721)
-
-```cpp
-class Solution {
-public:
-    int countSpecialNumbers(int n) {
-        string s = to_string(n);
-        
-        // 返回从第i位开始填数字，已填集合为mask，能够构造出至少一位重复数字的个数
-        // is_limit，检查前面的数字是否都是n对应位上的，如果为 true 则第i位只能填s[i]，否则可以最高填9
-        // is_num，检查前面是否以前填过数字，ture则前面填过，第i位可以填0-9；如果为 false，我们可以跳过，或者第i位置只能填1-x，x由is_limit约束
-
-        function<int(int, bool, bool, uint16_t)> f = [&](int i, bool is_limit, bool is_num, uint16_t mask) -> int {
-            if (i == s.length()) {
-                return is_num;  //  前面填了的话，这是一个可行结果
-            }
-
-            int res = 0;
-            if (!is_num) {
-                // 不选，直接跳到下一个
-                res = f(i + 1, false, false, mask);
-            }
-
-            // 选
-            int up = is_limit ? (s[i] - '0') : 9;
-            for (int j = 1 - is_num; j <= up; ++j) {
-                if ((mask & (1 << j)) == 0) {
-                    // 没有填过
-                    res += f(i + 1, is_limit && (j == s[i] - '0'), true, mask | (1 << j));
-                }
-            }
-            return res;
-        };
-
-        return f(0, true, false, 0);
-    }
-};
-```
-
-### [1012. 至少有 1 位重复的数字](https://leetcode.cn/problems/numbers-with-repeated-digits/)
-
-[2376题](#2376.统计特殊整数)的补集
-
-```cpp
-return n - f(0, true, false, 0);
-```
 ### [1017. 负二进制转换(十进制转其他进制)](https://leetcode.cn/problems/convert-to-base-2/)
 
 模版

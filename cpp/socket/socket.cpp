@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "AllInclude.h"
+#include "../AllInclude.h"
 
 class Solution {
 public:
