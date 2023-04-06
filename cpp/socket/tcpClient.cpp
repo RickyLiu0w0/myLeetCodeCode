@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <memory.h>
 #include <iostream>
 
 using namespace std;

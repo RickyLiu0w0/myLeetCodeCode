@@ -1,9 +1,5 @@
 [toc]
 
-!!! warning 待更新
-
-区间dp
-
 [1035] 不相交的线
 
 
@@ -576,6 +572,52 @@ public:
             return res;
         };
         return dp(n);
+    }
+};
+```
+
+### [1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/)
+
+相等的情况下，同时选择
+
+不相等的情况下，选择最小的一个
+
+```c++
+class Solution {
+    // 题目就是最长公共子序列
+public:
+    int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
+        /**
+         * dp[i][j]代表num1的[0, i]以及num2[0, j]的最长公共子序列
+         *               _
+         *              | dp[i-1][j-1] + 1  (nums1[i] == nums2[j])
+         * dp[i][j] == <
+         *              | max(dp[i-1][j], dp[i][j-1])) (nums1[i] != nums2[j])
+         *               _
+         */
+
+        int m = nums1.size(), n = nums2.size();
+
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+
+        for (int i = 1; i <= m; ++i) {
+            for (int j = 1; j <= n; ++j) {
+                if (nums1[i - 1] == nums2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        // for (auto& v : dp) {
+        //     for (auto& num : v) {
+        //         cout << num << " ";
+        //     }
+        //     cout << endl;
+        // }
+
+        return dp[m][n];
     }
 };
 ```

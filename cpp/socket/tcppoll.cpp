@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <memory.h>
 
 #include <iostream>
 
@@ -171,7 +172,6 @@ int main() {
                             cout << "recv: eventfd: " << eventfd << " size = " << strlen(buf) << ", buf: " << buf;
                             write(eventfd, buf, strlen(buf));
                         }
-                        fds[eventfd].revents = 0b11111;
                         cout << "After handel revents: " << fds[eventfd].revents << endl << endl;
                     }
                 }

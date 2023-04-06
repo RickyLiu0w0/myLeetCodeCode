@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <iostream>
+#include <memory.h>
 
 using namespace std;
 
