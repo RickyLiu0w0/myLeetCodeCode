@@ -220,6 +220,97 @@ $$arr[i]−i \geq arr[j]−j$$
 故构造$b[i]=arr[i]−i$
 求`b`的最长非递减子序列，再用`n`减去这个子序列的长度，就得到了答案。
 
+### [1040. 移动石子直到连续 II](https://leetcode.cn/problems/moving-stones-until-consecutive-ii/)
+
+![【图解】下跳棋（Python/Java/C++/Go）](https://pic.leetcode.cn/1680696212-AUVzBz-1040-cut.png)
+
+```cpp
+class Solution {
+public:
+    vector<int> numMovesStonesII(vector<int>& stones) {
+        vector<int>& s = stones;
+        sort(s.begin(), s.end());
+
+        int n = s.size();
+        // 把前面的往后挪
+        // 在(1, n-1)中，应该有s[n-1] - s[1] - 1个数，现在已存在(n - 3)个数
+        // 空位数量（需补充，还差） s[n-1] - s[1] - 1 - (n - 3) 个数
+        int res1 = s[n - 1] - s[1] + 2 - n;
+
+        // 把后面的往前挪
+        // 空位数量 s[n-2] - s[0] - 1 - (n - 3)
+        int res2 = s[n - 2] - s[0] + 2 - n;
+        int max_res = max(res1, res2);
+
+        if (!res1 || !res2) {
+            // 有一边是排紧凑了
+            return {min(2, max_res), max_res};
+        }
+
+        int min_res = 0, left = 0, right = 0;
+
+        while (right < n) {
+            // 这个双指针是寻找数字的最大窗口
+            // 窗口内部一定满足s[right] - s[left] + 1 <= n
+            while (s[right] - s[left] + 1 > n) {
+                ++left;
+            }
+            min_res = max(min_res, right - left + 1);
+            ++right;
+        }
+        return {n - min_res, max_res};
+    }
+};
+```
+
+### [76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/)
+
+```cpp
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        unordered_map<char, int> map;
+
+        for (auto& c: t) {
+            map[c]++;
+        }
+
+        int l = 0, r = 0, begin = 0, sub_size = INT_MAX, target_num = map.size(), n = s.length();
+
+        while (r < n) {
+            char c = s[r++];
+
+            if (map.count(c)) {
+                map[c]--;
+
+                if (map[c] == 0) {
+                    // 已经完成
+                    target_num--;
+                }
+
+                while (target_num == 0) {
+                    if (sub_size > r - l) {
+
+                        begin = l;
+                        sub_size = r - l;
+                    }
+
+                    char cc = s[l++];
+
+                    if (map.count(cc)) {
+                        map[cc]++;
+                        if (map[cc] == 1) {
+                            target_num++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return sub_size == INT_MAX ? "" : s.substr(begin, sub_size);
+    }
+};
+```
 
 ## 回溯（全排列）
 
@@ -432,6 +523,138 @@ private:
         char c = s[i];
         s[i] = s[j];
         s[j] = c;
+    }
+};
+```
+
+### [130. 被围绕的区域](https://leetcode.cn/problems/surrounded-regions/)
+
+回溯，将和边界相连的`O`转变为`%`，然后将剩下的`O`转为`X`，`%`变回`O`。
+
+![示例1](https://assets.leetcode.com/uploads/2021/02/19/xogrid.jpg)
+
+```cpp
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        int m = board.size(), n = board.front().size();
+        const array<array<int, 2>, 4> direction = {0,-1, 0, 1, -1, 0, 1,0};
+        function<void(int, int)> dfs = [&](int row, int col) {
+            if (row == -1 || col == -1 || row == m || col == n || 'O' != board[row][col]) {
+                // 结束条件
+                return;
+            }
+
+            // 作出处理
+            board[row][col] = '%'; // 特殊标记
+            
+            // 选择列表
+            for (int i = 0; i < 4; ++i){
+                // 遍历上下左右四个方向
+                dfs(row + direction[i][0], col + direction[i][1]);
+            }
+            return;
+        };
+
+        // 将与边边相连的O都更改标记为%
+        for (int j = 0; j < n; ++j) {
+            // 第一行以及最后一行
+            dfs(0, j);
+            dfs(m - 1, j);
+        }
+
+        for (int i = 1; i < m - 1; ++i) {
+            // 第一列以及最后一列，排除第一行以及最后一行，因为已经处理了
+            dfs(i, 0);
+            dfs(i, n - 1);
+        }
+
+        // 将中间内部的O转变为X，%转为O
+        for (auto& r : board) {
+            for (auto& item : r) {
+                if (item == 'O') {
+                    item = 'X';
+                } else if (item == '%') {
+                    item = 'O';
+                }
+            }
+        }
+        return;
+    }
+};
+```
+
+### [93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
+
+难点在不能有前导0
+
+```cpp
+class Solution {
+public:
+    vector<string> restoreIpAddresses(string s) {
+        int n = s.length();
+
+        if (n < 4 || n > 16) {
+            return {};
+        }
+        vector<string> res;
+        // begin起始下标，block_index，第几块
+        function<void(int begin, int block_index)> dfs = [&](int begin, int block_index) {
+            // 结束条件
+            if (s.size() <= begin) {
+                return;
+            }
+
+            if (block_index == 3) {
+                // 最后一块
+                if (s.size() - begin > 3) {
+                    // 最后一块长度大于3，不合法分割，或者啥东西都不剩了
+                    return;
+                }
+
+                if (stoi(s.substr(begin)) <= 255) {
+                    if (s.size() - begin > 1 && s[begin] == '0') {
+                        // 出现前导0
+                        return;
+                    }
+
+                    // cout << "1: " << s.substr(begin) << endl;
+                    // xxx.xxx.xxx.0 ~ xxx.xxx.xxx.255
+                    // cout << "res " << s << endl;
+                    res.emplace_back(s);
+                }
+                return;
+            }
+
+            // 选择列表，当前block内可以选0～255，但是不能前导0
+
+            // 一个位 .0. ~ .9.
+            // 确保.之后的不是0
+            // cout << "2: " << s[begin] << endl;
+            s.insert(begin + 1, ".");
+            dfs(begin + 2, block_index + 1);
+            s.erase(begin + 1, 1);  // 撤销选择
+
+            // 两个到三个位 .10. ~ .255.
+            // 不能有前导0
+            if (s[begin] != '0') {
+                for (int i = 2; i <= 3 && begin + i < s.size(); ++i) {
+                    // 确保不大于255
+                    // cout << "2: " << s.substr(begin, i) << endl;
+                    if (stoi(s.substr(begin, i)) > 255) {
+                        continue;
+                    }
+                    
+                    s.insert(begin + i, ".");
+                    dfs(begin + 1 + i, block_index + 1);
+                    s.erase(begin + i, 1);  // 撤销选择
+                }
+            }
+
+            return;
+        };
+        dfs(0, 0);
+        return res;
     }
 };
 ```
@@ -705,6 +928,8 @@ class Solution {
 public:
     int countSpecialNumbers(int n) {
         string s = to_string(n);
+        int memo[s.size()][1 << 10];
+        memset(memo, -1, sizeof(memo));  // -1 表示没有计算过
         
         // 返回从第i位开始填数字，已填集合为mask，能够构造出至少一位重复数字的个数
         // is_limit，检查前面的数字是否都是n对应位上的，如果为 true 则第i位只能填s[i]，否则可以最高填9
@@ -729,6 +954,10 @@ public:
                     res += f(i + 1, is_limit && (j == s[i] - '0'), true, mask | (1 << j));
                 }
             }
+            
+            if (!is_limit && is_num)
+                memo[i][mask] = res;
+
             return res;
         };
 
@@ -920,6 +1149,167 @@ public:
             s.push_back(x + '0');
         }
         return s;
+    }
+};
+```
+
+## 并查集
+
+!!! note 讲解：[并查集（UNION-FIND）算法](https://labuladong.github.io/algo/di-yi-zhan-da78c/shou-ba-sh-03a72/bing-cha-j-323f3/)
+
+### [323. 无向图中连通分量的数目(plus)](https://leetcode.cn/problems/number-of-connected-components-in-an-undirected-graph/description/)
+
+你有一个包含`n`个节点的图。给定一个整数`n`和一个数组`edges`，其中`edges[i] = [ai, bi]`表示图中$a_i$和$b_i$之间有一条边。
+
+返回**图中已连接分量的数目**。
+
+并查集的返回就是联通分量的个数
+
+!!! example 示例 1:
+
+![示例 1:](https://assets.leetcode.com/uploads/2021/03/14/conn1-graph.jpg)
+
+输入: `n = 5`, `edges = [[0, 1], [1, 2], [3, 4]]`
+输出: `2`
+
+!!! example 示例 2:
+
+
+![示例 2:](https://assets.leetcode.com/uploads/2021/03/14/conn2-graph.jpg)
+
+输入: `n = 5`, `edges = [[0,1], [1,2], [2,3], [3,4]]`
+输出: `1`
+
+```cpp
+class UF{
+public:
+    explicit UF(int n):count(n), parent(n) {
+        int i = 0;
+        for (auto& x: parent) {
+            x = i++;
+        }
+    }
+
+    int get_count() const {
+        return count;
+    }
+
+    int find(int x) {
+        if (x != parent[x]) {
+            // 不是根节点
+            // 找到根节点之后将当前节点x的父节点都设置为根节点
+            parent[x] = find(parent[x]);
+        }
+
+        // 返回根节点
+        return parent[x];
+    }
+
+    void connect(int p, int q) {
+        int root_p = find(p);
+        int root_q = find(q);
+        if (root_p == root_q) {
+            // 它们是同一根节点，说明在同一颗树上，无需拼接
+            return;
+        }
+        
+        // 任意将根节点拼接
+        parent[root_p] = root_q; // 这是将p拼在q的子树上
+        // parent[root_q] = root_p; // 这个也行
+        count--; // 少了一个联通分量
+        return;
+    }
+private:
+    vector<int> parent;
+    int count;
+};
+
+class Solution {
+public:
+    int countComponents(int n, vector<vector<int>>& edges) {
+        UF uf(n);
+        for (auto& pair : edges) {
+            // 连接两个点
+            uf.connect(pair[0], pair[1]);
+        }
+        return uf.get_count();
+    }
+};
+```
+
+### [990. 等式方程的可满足性](https://leetcode.cn/problems/satisfiability-of-equality-equations/)
+
+```cpp
+class UF {
+public:
+    explicit UF(int n) : parent_(n) {
+        int i = 0;
+        for (auto& x : parent_) {
+            x = i++;
+        }
+    }
+
+    // 省略...
+
+    bool if_set(int p, int q) { return find(p) == find(q); }
+
+private:
+    vector<int> parent_;
+};
+
+class Solution {
+public:
+    bool equationsPossible(vector<string>& equations) {
+        UF uf(26);
+
+        for (auto& s : equations) {
+            if (s[1] == '=') {
+                uf.connect(s[0] - 'a', s[3] - 'a');
+            }
+        }
+
+        for (auto& s : equations) {
+            if (s[1] == '!') {
+                if (uf.if_set(s[0] - 'a', s[3] - 'a')) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+```
+
+## 前缀和
+
+### [560. 和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)
+
+假设前缀和数组`S[n+1]`，有和区间`S[j] - s[i]`代表`(i,j]`之间的和。
+
+题意要求和为`k`，即`s[j] - s[i] == k`，变换得`s[j] - k == s[i]`，且`i < j`。
+
+这里不能用`s[i] + k == s[j]`，因为`s[i]`会先被算出来，且在将前缀和`s[j]`加入hash之前就要进行上述判断，严格保证`i < j`。**不能把前缀和全部算完再判断。**
+
+```cpp
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int n = nums.size(), left = 0, right = 0, res = 0, sum = 0;
+        unordered_map<int, int> pre_sum_map;
+        pre_sum_map[0] = 1;
+        int i = 0;
+
+        // s[j] - s[i] = k
+        // s[j] - k = s[i] 要确保 i < j
+        for (auto& num : nums) {
+            sum += num;
+            if (pre_sum_map.count(sum - k)) {
+                // 找到s[i]
+                res += pre_sum_map[sum - k];
+            }
+            pre_sum_map[sum]++;
+        }
+        return res;
     }
 };
 ```

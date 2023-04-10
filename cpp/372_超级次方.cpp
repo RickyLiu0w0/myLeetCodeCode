@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-04-07
+ * 55/55 (8 ms)
+ * Your runtime beats 81.83 % of cpp submissions
+ * Your memory usage beats 49.74 % of cpp submissions (11.3 MB)
+ */
 const int MOD = 1337;
 class Solution {
     /**
