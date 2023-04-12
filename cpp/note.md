@@ -1,8 +1,5 @@
 [toc]
 
-[1035] 不相交的线
-
-
 ## 滑动窗口
 
 [同向双指针 滑动窗口【基础算法精讲 01】](https://www.bilibili.com/video/BV1hd4y1r7Gq)
@@ -799,6 +796,104 @@ public:
 };
 ```
 
+### [10. 正则表达式匹配](https://leetcode.cn/problems/regular-expression-matching/)
+
+!!! note 思路
+
+[经典动态规划：正则表达式](https://labuladong.github.io/algo/di-er-zhan-a01c6/yong-dong--63ceb/jing-dian--8d516/)
+
+
+```cpp
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        return dp(s, 0, p, 0);
+    }
+
+private:
+    unordered_map<string, bool> memo;  // 备忘录
+
+    // s[..i]和p[..j]是否匹配
+    bool dp(string& s, int i, string& p, int j) {
+        // base case
+        int m = s.length(), n = p.length();
+        if (j == n) {
+            // 模式指针已走到末尾，现在只需判断字符串指针i是否已到末尾
+            return m == i;
+        }
+
+        if (m == i) {
+            // 字符串指针i已到末尾
+            // 剩下的模式可能有三种情况
+            // A*B (false)
+            // A*B* (true)
+            // A*BB (false)
+            if ((n - j) % 2) {
+                // A*B
+                return false;
+            }
+            for (; j < n; j += 2) {
+                if (p[j + 1] != '*') {
+                    // A*BB (false)
+                    return false;
+                }
+            }
+
+            return true;  // A*B* (true)
+        }
+        /*------------ base case end -------------------*/
+        string key = to_string(i) + "," + to_string(j);
+        bool res = false;
+        if (memo.count(key) != 0) return memo[key];
+        if (s[i] == p[j] || p[j] == '.') {
+            // 匹配上了
+            if (j < n - 1 && p[j + 1] == '*') {
+                // 这是一个通配符，但是不确定有没有用上
+                res =  /* 没用上 */ dp(s, i, p, j + 2) || /* 用上了，通过递归才直到用了多少次 */ dp(s, i + 1, p, j);
+            } else {
+                // 老老实实一个一个匹配
+                res =  dp(s, i + 1, p, j + 1);
+            }
+        } else {
+            // 匹配不上
+            if (j < n - 1 && p[j + 1] == '*') {
+                // 这是一个通配符（免死金牌），但0次匹配，j直接到下一个
+                res = dp(s, i, p, j + 2);
+            } else {
+                // 没有免死金牌，无了
+                res = false;
+            }
+        }
+        memo[key] = res;
+        return res;
+    }
+};
+```
+### [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
+
+```cpp
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int one = text1.length();
+        int two = text2.length();
+
+        vector<vector<int>> dp(one + 1, vector<int>(two + 1, 0));
+
+        for (int i = 1; i <= one; ++i) {
+            for (int j = 1; j <= two; ++j) {
+                if (text1[i - 1] == text2[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[one][two];
+    }
+};
+```
+
 ### [1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/)
 
 相等的情况下，同时选择
@@ -1009,103 +1104,6 @@ public:
     }
 };
 ```
-### [10. 正则表达式匹配](https://leetcode.cn/problems/regular-expression-matching/)
-
-!!! note 思路
-
-[经典动态规划：正则表达式](https://labuladong.github.io/algo/di-er-zhan-a01c6/yong-dong--63ceb/jing-dian--8d516/)
-
-
-```cpp
-class Solution {
-public:
-    bool isMatch(string s, string p) {
-        return dp(s, 0, p, 0);
-    }
-
-private:
-    unordered_map<string, bool> memo;  // 备忘录
-
-    // s[..i]和p[..j]是否匹配
-    bool dp(string& s, int i, string& p, int j) {
-        // base case
-        int m = s.length(), n = p.length();
-        if (j == n) {
-            // 模式指针已走到末尾，现在只需判断字符串指针i是否已到末尾
-            return m == i;
-        }
-
-        if (m == i) {
-            // 字符串指针i已到末尾
-            // 剩下的模式可能有三种情况
-            // A*B (false)
-            // A*B* (true)
-            // A*BB (false)
-            if ((n - j) % 2) {
-                // A*B
-                return false;
-            }
-            for (; j < n; j += 2) {
-                if (p[j + 1] != '*') {
-                    // A*BB (false)
-                    return false;
-                }
-            }
-
-            return true;  // A*B* (true)
-        }
-        /*------------ base case end -------------------*/
-        string key = to_string(i) + "," + to_string(j);
-        bool res = false;
-        if (memo.count(key) != 0) return memo[key];
-        if (s[i] == p[j] || p[j] == '.') {
-            // 匹配上了
-            if (j < n - 1 && p[j + 1] == '*') {
-                // 这是一个通配符，但是不确定有没有用上
-                res =  /* 没用上 */ dp(s, i, p, j + 2) || /* 用上了，通过递归才直到用了多少次 */ dp(s, i + 1, p, j);
-            } else {
-                // 老老实实一个一个匹配
-                res =  dp(s, i + 1, p, j + 1);
-            }
-        } else {
-            // 匹配不上
-            if (j < n - 1 && p[j + 1] == '*') {
-                // 这是一个通配符（免死金牌），但0次匹配，j直接到下一个
-                res = dp(s, i, p, j + 2);
-            } else {
-                // 没有免死金牌，无了
-                res = false;
-            }
-        }
-        memo[key] = res;
-        return res;
-    }
-};
-```
-### [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
-
-```cpp
-class Solution {
-public:
-    int longestCommonSubsequence(string text1, string text2) {
-        int one = text1.length();
-        int two = text2.length();
-
-        vector<vector<int>> dp(one + 1, vector<int>(two + 1, 0));
-
-        for (int i = 1; i <= one; ++i) {
-            for (int j = 1; j <= two; ++j) {
-                if (text1[i - 1] == text2[j - 1]) {
-                    dp[i][j] = dp[i - 1][j - 1] + 1;
-                } else {
-                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
-                }
-            }
-        }
-        return dp[one][two];
-    }
-};
-```
 
 ### [1017. 负二进制转换(十进制转其他进制)](https://leetcode.cn/problems/convert-to-base-2/)
 
@@ -1151,6 +1149,114 @@ public:
         return s;
     }
 };
+```
+
+## 链表
+
+[反转链表【基础算法精讲 06】](https://www.bilibili.com/video/BV1sd4y1x7KN)
+
+### [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode *pre = nullptr, *cur = head;
+        while (cur) {
+            ListNode* nxt = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = nxt;
+        }
+
+        return pre;
+    }
+};
+```
+
+### [234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
+
+先把前半部分反转，然后再一一比对
+
+```cpp
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        // 反转一半链表，然后和后面的比对
+        if (!head->next) return true;
+
+        // 获取链表长度
+        int n = 0;
+        ListNode* p = head;
+        while (p) {
+            p = p->next;
+            ++n;
+        }
+
+        int mid = n >> 1;
+        ListNode* pre = nullptr;
+        ListNode* cur = head, *nxt;
+
+        for (int _ = 0; _ < mid; ++_) {
+            nxt = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = nxt;
+        }
+
+        // pre就是list1
+        // cur就是list2
+        if (n % 2) {
+            // 长度为奇数，中间不用管
+            cur = cur->next;
+        }
+
+        while (cur) {
+            if (cur->val != pre->val) {
+                return false;
+            }
+
+            cur = cur->next;
+            pre = pre->next;
+        }
+        return true;
+    }
+};
+```
+
+### [24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+这题要添加哨兵节点，i从1开始算，每次加`k(这里是2)`个，`<n`条件。
+
+```cpp
+ListNode* swapPairs(ListNode* head) {
+        // 获取链表长度
+        int n = 0;
+        ListNode* p = head;
+        while (p) {
+            ++n;
+            p = p->next;
+        }
+
+        ListNode h(0, head);
+        ListNode *cur = head, *pre, *head_ptr = &h;
+        for (int i = 1; i < n; i += 2) {
+            ListNode* nxt;
+            pre = nullptr;
+            for (int _ = 0; _ < 2; ++_) {
+                nxt = cur->next;
+                cur->next = pre;
+                pre = cur;
+                cur = nxt;
+            }
+
+            nxt = head_ptr->next;
+            head_ptr->next->next = cur;
+            head_ptr->next = pre;
+            head_ptr = nxt;
+        }
+        return h.next;
+}
 ```
 
 ## 并查集
@@ -1274,6 +1380,7 @@ public:
                     return false;
                 }
             }
+
         }
         return true;
     }
@@ -1310,6 +1417,63 @@ public:
             pre_sum_map[sum]++;
         }
         return res;
+    }
+}
+```
+
+## 单调栈
+
+### [1019. 链表中的下一个更大节点](https://leetcode.cn/problems/next-greater-node-in-linked-list/)
+
+![用每个数，更新其它数的下一个更大元素](https://pic.leetcode.cn/1681051452-kjwDTN-1019-2-c.png)
+
+```cpp
+class Solution {
+public:
+    vector<int> nextLargerNodes(ListNode* head) {
+        stack<pair<int, int>> st;
+        int index = 0;
+        vector<int> res;
+
+        while (head) {
+            int val = head->val;
+
+            while (!st.empty() && val > st.top().first) {
+                res[st.top().second] = val;
+                st.pop();
+            }
+
+            st.push(make_pair(val, index));
+            res.emplace_back(0);
+            head = head->next;
+            ++index;
+        }
+        return res;
+    }
+};
+```
+
+其实可以用`res/ant`数组记录数字，`st`栈只记录下标`res/ant`数组中的下标
+
+```cpp
+class Solution {
+public:
+    vector<int> nextLargerNodes(ListNode *head) {
+        vector<int> ans;
+        stack<int> st; // 单调栈（只存下标）
+        for (auto cur = head; cur; cur = cur->next) {
+            while (!st.empty() && ans[st.top()] < cur->val) {
+                ans[st.top()] = cur->val; // ans[st.top()] 后面不会再访问到了
+                st.pop();
+            }
+            st.push(ans.size()); // 当前 ans 的长度就是当前节点的下标
+            ans.push_back(cur->val);
+        }
+        while (!st.empty()) {
+            ans[st.top()] = 0; // 没有下一个更大元素
+            st.pop();
+        }
+        return ans;
     }
 };
 ```
