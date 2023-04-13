@@ -1391,7 +1391,7 @@ public:
 
 ### [560. 和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)
 
-假设前缀和数组`S[n+1]`，有和区间`S[j] - s[i]`代表`(i,j]`之间的和。
+假设前缀和数组`s[n+1]`，有和区间`s[j] - s[i]`代表`(i,j]`之间的和。
 
 题意要求和为`k`，即`s[j] - s[i] == k`，变换得`s[j] - k == s[i]`，且`i < j`。
 
@@ -1419,6 +1419,49 @@ public:
         return res;
     }
 }
+```
+
+
+### [525. 连续数组](https://leetcode.cn/problems/contiguous-array/)
+
+!!! tip 转变为和为0的子数组
+
+子数组0和1的个数相等
+
+相当于
+
+将`0 -> -1`，`1 -> 1`，子数组内和为0，用到前缀和
+
+有前缀和数组`S`，当`i < j`，有和区间`s[j] - s[i]`代表`(i,j]`之间的和。
+
+要求和为0，即`s[j] == s[i]`
+
+`j`从`[1,n]`遍历，`s[0] = 0`。当遇到`s[j] == s[i]`时，即`(i,j]`之间是满足题意的子数组，计算`j - i`，即子区间长度。此时保留`s[i]`不用更改下标。若`s[j]`的值在哈西表中不存在，则记录当前下标`j`。
+
+```cpp
+class Solution {
+public:
+    int findMaxLength(vector<int>& nums) {
+        int n = nums.size();
+        for (auto & num : nums) {
+            num = (num << 1) - 1; // 1 -> 1, 0 -> -1
+        }
+        int sum = 0;
+        unordered_map<int, int> hash;
+        hash[0] = 0;
+        int res = 0;
+        for (int j = 0; j < n; ++j) {
+            sum += nums[j];
+            if (hash.count(sum)) {
+                // 找到s[i]，令s[j] - s[i] == 0
+                res = max(res, j + 1 - hash[sum]);
+            } else {
+                hash[sum] = j + 1;
+            }
+        }
+        return res;
+    }
+};
 ```
 
 ## 单调栈
@@ -1476,4 +1519,3 @@ public:
         return ans;
     }
 };
-```
