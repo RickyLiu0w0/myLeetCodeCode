@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-04-14
+ * 354/354 (8 ms)
+ * Your runtime beats 39.84 % of cpp submissions
+ * Your memory usage beats 5.02 % of cpp submissions (16.9 MB)
+*/
 class Solution {
 public:
     bool isMatch(string s, string p) {
