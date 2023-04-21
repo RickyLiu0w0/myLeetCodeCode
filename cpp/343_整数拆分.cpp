@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-04-19
+ * 50/50 (0 ms)
+ * Your runtime beats 100 % of cpp submissions
+ * Your memory usage beats 62.67 % of cpp submissions (6 MB)
+ */
 class Solution {
 public:
     /*

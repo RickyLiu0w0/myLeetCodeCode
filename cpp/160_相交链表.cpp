@@ -8,6 +8,13 @@
 
 // @lc code=start
 /**
+ * Accepted 2023-04-19
+ * 39/39 (40 ms)
+ * Your runtime beats 68.38 % of cpp submissions
+ * Your memory usage beats 39.29 % of cpp submissions (14.3 MB)
+ */
+
+/**
  * Definition for singly-linked list.
  * struct ListNode {
  *     int val;

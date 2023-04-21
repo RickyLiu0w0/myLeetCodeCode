@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-04-21
+ * 93/93 (68 ms)
+ * Your runtime beats 86.69 % of cpp submissions
+ * Your memory usage beats 43.49 % of cpp submissions (40.6 MB)
+ */
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {

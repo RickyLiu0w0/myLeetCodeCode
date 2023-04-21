@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-04-12
+ * 10/10 (28 ms)
+ * Your runtime beats 89.37 % of cpp submissions
+ * Your memory usage beats 57.4 % of cpp submissions (19.3 MB)
+*/
 class KthLargest {
 public:
     KthLargest(int k, vector<int>& nums) : k_(k) {
