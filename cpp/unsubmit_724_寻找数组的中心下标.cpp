@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-04-22
+ * 746/746 (16 ms)
+ * Your runtime beats 87.72 % of cpp submissions
+ * Your memory usage beats 9.17 % of cpp submissions (30.9 MB)
+*/
 class Solution {
 public:
     int pivotIndex(vector<int>& nums) {
@@ -18,7 +24,7 @@ public:
             pre_sum[i + 1] = pre_sum[i] + nums[i];
         }
 
-        int i = n;  // i 为 (0, n]
+        int i = 0;  // i 为 [0, n)
         while (i < n) {
             if (pre_sum[n] - pre_sum[i+1] == pre_sum[i]) {
                 break;
