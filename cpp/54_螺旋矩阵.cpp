@@ -8,53 +8,76 @@
 
 // @lc code=start
 /**
- * Accepted 2023-07-25
- * 25/25 (4 ms)
- * Your runtime beats 33.12 % of cpp submissions
- * Your memory usage beats 29.62 % of cpp submissions (6.8 MB)
+ * Accepted 2023-07-29
+ * 25/25 (0 ms)
+ * Your runtime beats 100 % of cpp submissions
+ * Your memory usage beats 12.62 % of cpp submissions (6.8 MB)
  */
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        const vector<pair<int,int>> direction = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-        int length = matrix.at(0).size();
-        int width = matrix.size();
         vector<int> res;
-        pair<int, int> pos = {0, 0};
-        int currentDirection = 0;
-        while (1) {
-            res.emplace_back(matrix[pos.first][pos.second]);
-            matrix[pos.first][pos.second] = 102;
-
-            // step
-            pos.first += direction[currentDirection].first;
-            pos.second += direction[currentDirection].second;
-            function<bool(int,int)> peek = [&matrix, length, width](int x, int y) -> bool {
-                return x < 0 || x == width || y < 0 || y == length || matrix[x][y] == 102;
-            };
-
-            if (peek(pos.first, pos.second)) {
-                // 出界或碰到已遍历过的地方，退回来转向
-                pos.first -= direction[currentDirection].first;
-                pos.second -= direction[currentDirection].second;
-
-                bool sucess = false;
-                for (int i = 1; i < 4; ++i) {
-                    pos.first += direction[(currentDirection + i) % 4].first;
-                    pos.second += direction[(currentDirection + i) % 4].second;
-                    if (!peek(pos.first, pos.second)) {
-                        sucess = true;
-                        currentDirection = (currentDirection + i) % 4;
-                        break;
-                    }
-                }
-                if (!sucess) {
-                    break;
-                }
-            }
+        m = matrix.size();
+        n = matrix.front().size();
+        int i = 0, j = 0;
+        int cnt = m * n;
+        direction = right;
+        while (cnt) {
+            res.emplace_back(matrix[i][j]);
+            matrix[i][j] = 101;
+            next_num(matrix, i, j);
+            cnt--;
         }
         return res;
     }
+
+private:
+    enum Direction { up, down, left, right } direction;
+    int m, n;
+
+    void next_num(vector<vector<int>>& matrix, int& i, int& j) {
+        switch (direction) {
+            case up:
+                if (m == 0 || matrix[i - 1][j] == 101) {
+                    // 无法往上，只能往右
+                    j++;
+                    direction = right;
+                } else {
+                    i--;
+                }
+                break;
+
+            case down: 
+                if (i + 1 == m || matrix[i + 1][j] == 101) {
+                    // 无法往下，只能往左
+                    j--;
+                    direction = left;
+                } else {
+                    i++;
+                }
+                break;
+
+            case right:
+                if (j + 1 == n || matrix[i][j + 1] == 101){
+                    // 无法往右，只能往下
+                    i++;
+                    direction = down;
+                } else {
+                    j++;
+                }
+                break;
+
+            default:
+                if (j == 0 || matrix[i][j - 1] == 101) {
+                    //  无法往左，只能往上
+                    --i;
+                    direction = up;
+                } else {
+                    --j;
+                }
+                break;
+        }
+        return;
+    }
 };
 // @lc code=end
-

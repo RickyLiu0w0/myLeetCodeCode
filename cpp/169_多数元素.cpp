@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-07-29
+ * 47/47 (16 ms)
+ * Your runtime beats 73.17 % of cpp submissions
+ * Your memory usage beats 94.81 % of cpp submissions (19 MB)
+ */
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
