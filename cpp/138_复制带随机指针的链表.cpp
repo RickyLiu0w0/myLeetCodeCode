@@ -6,6 +6,19 @@
 
 #include "AllInclude.h"
 
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+
 // @lc code=start
 
 // Definition for a Node.
@@ -23,7 +36,12 @@ public:
     }
 };
 */
-
+/**
+ * Accepted 2023-08-02
+ * 19/19 cases passed (8 ms)
+ * Your runtime beats 79.21 % of cpp submissions
+ * Your memory usage beats 5.26 % of cpp submissions (15.6 MB)
+*/
 class Solution {
 public:
     Node* copyRandomList(Node* head) {

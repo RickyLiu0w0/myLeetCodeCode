@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-04-22
+ * 564/564 (88 ms)
+ * Your runtime beats 93.97 % of cpp submissions
+ * Your memory usage beats 66.9 % of cpp submissions (81.8 MB)
+*/
 class Solution {
 public:
     int findMaxLength(vector<int>& nums) {

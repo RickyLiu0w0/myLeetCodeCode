@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-07-29
+ * 130/130 (64 ms)
+ * Your runtime beats 98.31 % of cpp submissions
+ * Your memory usage beats 77.26 % of cpp submissions (14.4 MB)
+ */
 class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
