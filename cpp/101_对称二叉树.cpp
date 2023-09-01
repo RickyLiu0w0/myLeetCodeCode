@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 // @lc code=start
 /**
+ * Accepted 2023-09-01
+ * 199/199 (4 ms)
+ * Your runtime beats 77.9 % of cpp submissions
+ * Your memory usage beats 13.78 % of cpp submissions (16.2 MB)
+ */
+/**
  * Definition for a binary tree node.
  * struct TreeNode {
  *     int val;
@@ -26,15 +32,19 @@ public:
 private:
     bool help(TreeNode* l, TreeNode* r) {
         if (l == r) {
+            // 都是空的
             return true;
         } else if (!l || !r) {
+            // 有一个不为空
             return false;
         }
 
+        // 值需要一样
         if (l->val != r->val) {
             return false;
         }
 
+        // 交叉
         return help(l->left, r->right) && help(l->right, r->left);
     }
 };
