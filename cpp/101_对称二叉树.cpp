@@ -5,14 +5,13 @@
  */
 
 #include "AllInclude.h"
-
 // @lc code=start
 /**
- * Accepted 2023-08-08
+ * Accepted 2023-09-01
  * 199/199 (4 ms)
- * Your runtime beats 77.98 % of cpp submissions
- * Your memory usage beats 43.89 % of cpp submissions (16.1 MB)
-*/
+ * Your runtime beats 77.9 % of cpp submissions
+ * Your memory usage beats 13.78 % of cpp submissions (16.2 MB)
+ */
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -24,26 +23,29 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 public:
     bool isSymmetric(TreeNode* root) {
-        if (!root) {
+        return help(root->left, root->right);
+    }
+private:
+    bool help(TreeNode* l, TreeNode* r) {
+        if (l == r) {
+            // 都是空的
             return true;
+        } else if (!l || !r) {
+            // 有一个不为空
+            return false;
         }
 
-        function<bool(TreeNode*, TreeNode*)> help = [&](TreeNode* left, TreeNode* right) -> bool {
-            if (!left || !right) {
-                return left == right;
-            }
+        // 值需要一样
+        if (l->val != r->val) {
+            return false;
+        }
 
-            if (left->val != right->val) {
-                return false;
-            }
-
-            return help(left->left, right->right) && help(left->right, right->left);
-        };
-
-        return help(root->left, root->right);
+        // 交叉
+        return help(l->left, r->right) && help(l->right, r->left);
     }
 };
 // @lc code=end
