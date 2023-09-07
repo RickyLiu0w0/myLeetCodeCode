@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-08-28
+ * 86/86 (516 ms)
+ * Your runtime beats 47.9 % of cpp submissions
+ * Your memory usage beats 95.44 % of cpp submissions (7.7 MB)
+*/
 const int direction_x[4] = {-1, 1, 0, 0};  // 上下左右
 const int direction_y[4] = {0, 0, -1, 1};  // 上下左右
 
