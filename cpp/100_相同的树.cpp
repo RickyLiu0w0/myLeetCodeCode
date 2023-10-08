@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=104 lang=cpp
+ * @lc app=leetcode.cn id=100 lang=cpp
  *
- * [104] 二叉树的最大深度
+ * [100] 相同的树
  */
 
 #include "AllInclude.h"
@@ -9,9 +9,9 @@
 // @lc code=start
 /**
  * Accepted 2023-09-25
- * 39/39 (4 ms)
- * Your runtime beats 93.66 % of cpp submissions
- * Your memory usage beats 7.03 % of cpp submissions (18.7 MB)
+ * 61/61 (0 ms)
+ * Your runtime beats 100 % of cpp submissions
+ * Your memory usage beats 5.24 % of cpp submissions (10.2 MB)
 */
 /**
  * Definition for a binary tree node.
@@ -26,8 +26,17 @@
  */
 class Solution {
 public:
-    int maxDepth(TreeNode* root) {
-        return root ? max(maxDepth(root->left), maxDepth(root->right)) + 1: 0;
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (!p) {
+            return !q;
+        }
+        if (!q) {
+            return !p;
+        }
+        if (p->val == q->val)
+            return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+        else
+            return false;
     }
 };
 // @lc code=end

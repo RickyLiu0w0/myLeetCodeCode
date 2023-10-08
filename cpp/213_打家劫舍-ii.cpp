@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-09-18
+ * 75/75 (4 ms)
+ * Your runtime beats 39.11 % of cpp submissions
+ * Your memory usage beats 17.98 % of cpp submissions (7.9 MB)
+*/
 class Solution {
     public:
     int rob(vector<int>& nums) {
