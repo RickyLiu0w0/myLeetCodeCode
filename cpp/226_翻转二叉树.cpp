@@ -8,6 +8,12 @@
 
 // @lc code=start
 /**
+ * Accepted 2023-10-11
+ * 77/77 (0 ms)
+ * Your runtime beats 100 % of cpp submissions
+ * Your memory usage beats 21.42 % of cpp submissions (9.7 MB)
+ */
+/**
  * Definition for a binary tree node.
  * struct TreeNode {
  *     int val;

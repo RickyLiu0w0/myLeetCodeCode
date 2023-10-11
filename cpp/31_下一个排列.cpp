@@ -8,7 +8,7 @@
 
 // @lc code=start
 /**
- * Accepted 2023-07-05
+ * Accepted 2023-07-26
  * 266/266 (8 ms)
  * Your runtime beats 25.61 % of cpp submissions
  * Your memory usage beats 65.81 % of cpp submissions (11.8 MB)
@@ -16,7 +16,7 @@
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
-        // 1  3  6  5  4  2 找到第一个顺序的地方（3，5）说明逆序的地方都已经排好了，没得动了，考虑往前进一位
+        // 1  3  6  5  4  2 找到第一个顺序的地方（3，6）说明逆序的地方都已经排好了，没得动了，考虑往前进一位
         // 1  4  6  5  3  2 交换刚好比3大的数字（3，4）相当于进一位
         // 1  4  2  3  5  6 将进位后右边的树排成顺序，就是最小的
         int n = nums.size();

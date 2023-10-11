@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-10-11
+ * 22/22 (444 ms)
+ * Your runtime beats 24.57 % of cpp submissions
+ * Your memory usage beats 18.19 % of cpp submissions (139.6 MB)
+ */
 // 二维版本的前缀和
 /*
     //* 放一下一维的代码
