@@ -7,6 +7,12 @@
 #include "AllInclude.h"
 
 // @lc code=start
+/**
+ * Accepted 2023-10-12
+ * 15/15 (24 ms)
+ * Your runtime beats 62.68 % of cpp submissions
+ * Your memory usage beats 7.15 % of cpp submissions (17.1 MB)
+ */
 class NumArray {
 public:
     NumArray(vector<int>& nums) : s(nums.size() + 1, 0) {
